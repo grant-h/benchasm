@@ -6,6 +6,12 @@ Initially spawned from an interest in using SSE/AVX instructions. `gettimeofday`
 * NASM >= 2.13.01 (due to newer AVX instruction mnemonics)
 * GCC / Clang with 32-bit support
 
+### Ubuntu
+`$ sudo apt install libc6-dev-i386 nasm`
+
+### OSX
+`$ brew install nasm`
+
 ## Building
 ```
 $ make

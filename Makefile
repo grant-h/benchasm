@@ -6,24 +6,23 @@ CC=$(PREFIX)gcc
 
 SRC=bench.o bench_memcpy.o
 ASM_X86=memcpy.o
-FORMAT=
+NASM_FLAGS=
+
 
 ifneq ($(OS),Windows_NT)
     UNAME_S := $(shell uname -s)
 
     ifeq ($(UNAME_S),Linux)
-        FORMAT := elf
+        NASM_FLAGS := -f elf
     endif
     ifeq ($(UNAME_S),Darwin)
-        FORMAT := macho
+        NASM_FLAGS := -f macho -d LEADING_UNDERSCORES
     endif
 endif
 
-ifeq ($(FORMAT),)
+ifeq ($(NASM_FLAGS),)
     $(error "Unsupported OS version")
 endif
-
-$(info $(CCFLAGS))
 
 all : bench_memcpy
 
@@ -31,7 +30,7 @@ bench_memcpy : $(SRC) $(ASM_X86)
 	$(LD) -m32 -o $@ $(SRC) $(ASM_X86)
 
 %.o : %.a
-	$(NASM) -f $(FORMAT) -o $@ $<
+	$(NASM) $(NASM_FLAGS) -o $@ $<
 
 %.o : %.c
 	$(CC) -O2 -m32 -c $< -o $@

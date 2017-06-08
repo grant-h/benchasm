@@ -11,8 +11,8 @@ extern void * memcpy_avx2_vmovdqa(void * dst, const void * src, size_t sz);
 
 int main()
 {
-  size_t runs = 5000;
-  size_t size = 1024*1024*1;
+  size_t runs = 50000;
+  size_t size = 1024*1024*8;
 
   bench_memcpy("memcpy_avx2_vmovntdqa", memcpy_avx2_vmovdqa, size, runs);
   bench_memcpy("memcpy_sse_movntdq", memcpy_sse_movntdq, size, runs);

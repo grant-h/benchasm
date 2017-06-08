@@ -29,7 +29,10 @@ all : bench_memcpy
 bench_memcpy : $(SRC) $(ASM_X86)
 	$(LD) -m32 -o $@ $(SRC) $(ASM_X86)
 
-%.o : %.a
+%.o : %.S
+	$(NASM) $(NASM_FLAGS) -o $@ $<
+
+%.o : %.s
 	$(NASM) $(NASM_FLAGS) -o $@ $<
 
 %.o : %.c

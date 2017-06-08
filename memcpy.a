@@ -1,10 +1,19 @@
 BITS 32
 section .text
 
-global _memcpy_mov
+%macro cglobal 1
+  %ifdef LEADING_UNDERSCORES
+    global  _%1
+    %define %1 _%1
+    %1:
+  %elif
+    global  %1
+    %1:
+  %endif
+%endmacro 
 
 ; eax, ecx, edx are caller-saved, rest are callee saved
-_memcpy_mov:
+cglobal memcpy_mov
   mov eax, [esp+0x4]  ; dst
   mov edx, [esp+0x8]  ; src
   mov ecx, [esp+0xc] ; size
@@ -24,8 +33,7 @@ MOVLOOP:
   mov eax, [esp+0x4]  ; return dst
   ret
 
-global _memcpy_rep_movsb
-_memcpy_rep_movsb:
+cglobal memcpy_rep_movsb
   push ebp
   mov ebp, esp
 
@@ -46,8 +54,7 @@ _memcpy_rep_movsb:
   leave
   ret
 
-global _memcpy_rep_movsd
-_memcpy_rep_movsd:
+cglobal memcpy_rep_movsd
   push ebp
   mov ebp, esp
 
@@ -69,8 +76,7 @@ _memcpy_rep_movsd:
   leave
   ret
 
-global _memcpy_sse_movntdq
-_memcpy_sse_movntdq:
+cglobal memcpy_sse_movntdq
   push ebp
   mov ebp, esp
 
@@ -100,8 +106,7 @@ L1:
   leave
   ret
 
-global _memcpy_sse_movdqa
-_memcpy_sse_movdqa:
+cglobal memcpy_sse_movdqa
   push ebp
   mov ebp, esp
 
@@ -130,8 +135,7 @@ L2:
   leave
   ret
 
-global _memcpy_avx2_vmovdqa
-_memcpy_avx2_vmovdqa:
+cglobal memcpy_avx2_vmovdqa
   push ebp
   mov ebp, esp
 
